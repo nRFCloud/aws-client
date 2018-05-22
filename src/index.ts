@@ -2,8 +2,9 @@ import * as AWS from 'aws-sdk';
 import * as AWSCognitoSyncManager from 'amazon-cognito-js';
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import {Logger} from 'Iris-FE/src/logger/Logger';
+import {CognitoUserSession} from "amazon-cognito-identity-js";
 
-const {CognitoSyncManager, CognitoIdentityCredentials} = AWSCognitoSyncManager; // provided by dist/amazon-cognito.min.js from https://github.com/aws/amazon-cognito-js (NOT Amplify!)
+const {CognitoSyncManager, CognitoIdentityCredentials} = AWS; // provided by dist/amazon-cognito.min.js from https://github.com/aws/amazon-cognito-js (NOT Amplify!)
 const {AuthenticationDetails, CognitoUser, CognitoRefreshToken, CognitoUserAttribute, CognitoUserPool} = AmazonCognitoIdentity; // provided by dist/amazon-cognito-identity.min.js from https://github.com/aws/aws-amplify/tree/master/packages/amazon-cognito-identity-js
 
 // TODO: Make COGNITO_USER_POOL_ID configurable externally
