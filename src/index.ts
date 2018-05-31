@@ -25,12 +25,29 @@ export const userPool = new CognitoUserPool({
 
 namespace Cognito {
 
+	async function getCurrentUser(): Promise<AmazonCognitoIdentity.CognitoUser | null> {
+		const currentUser = userPool.getCurrentUser();
+		if (currentUser) {
+			await new Promise<void>((resolve, reject) => {
+				currentUser.getSession((error, session) => {
+					if (error) {
+						return reject(error);
+					}
+
+					resolve(session);
+				});
+			});
+		}
+
+		return currentUser;
+	}
+
 	/**
 	 * Logs out the currently logged-in user
 	 */
 	export const logout = async () => {
 		clearRefreshCredentials();
-		const currentCognitoUser = userPool.getCurrentUser();
+		const currentCognitoUser = await getCurrentUser();
 		if (currentCognitoUser) {
 			currentCognitoUser.signOut();
 		}
@@ -67,11 +84,17 @@ namespace Cognito {
 	 * @param newPassword Desired new password
 	 */
 	export const changePassword = async (oldPassword, newPassword) => {
-		const currentCognitoUser = userPool.getCurrentUser();
+		const currentCognitoUser = await getCurrentUser();
 		if (!currentCognitoUser || typeof currentCognitoUser.changePassword !== 'function') {
 			throw 'Need an authenticated user to change password';
 		}
-		return new Promise(resolve => currentCognitoUser.changePassword(oldPassword, newPassword, resolve));
+		return new Promise((resolve, reject) => currentCognitoUser.changePassword(oldPassword, newPassword, (error, result) => {
+			if (error) {
+				return reject(error);
+			}
+
+			resolve(result);
+		}));
 	};
 
 	/**
@@ -251,7 +274,7 @@ namespace Cognito {
 			return;
 		}
 		if (!credentials) {
-			const user = userPool.getCurrentUser();
+			const user = await getCurrentUser();
 			if (user) {
 				const session = await new Promise<any>((resolve, reject) => {
 					user.getSession((err, session) => {
