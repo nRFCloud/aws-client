@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest",
     "prepare": "npm run build",
-    "buildproduction": "webpack --config webpack.prod.js && gulp",
-    "builddev": "webpack --config webpack.dev.js && gulp builddev",
+    "buildproduction": "gulp",
+    "builddev": "gulp builddev",
     "copydev": "gulp copy",
     "build": "npm run builddev && npm run buildproduction"
   },

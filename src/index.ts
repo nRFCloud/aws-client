@@ -28,15 +28,7 @@ namespace Cognito {
 	async function getCurrentUser(): Promise<AmazonCognitoIdentity.CognitoUser | null> {
 		const currentUser = userPool.getCurrentUser();
 		if (currentUser) {
-			await new Promise<void>((resolve, reject) => {
-				currentUser.getSession((error, session) => {
-					if (error) {
-						return reject(error);
-					}
-
-					resolve(session);
-				});
-			});
+			await getUserSession();
 		}
 
 		return currentUser;
@@ -272,24 +264,15 @@ namespace Cognito {
 			await authenticate(token);
 			storeRefreshCredentials(credentials.username, result.getRefreshToken());
 			return;
-		}
-		if (!credentials) {
-			const user = await getCurrentUser();
-			if (user) {
-				const session = await new Promise<any>((resolve, reject) => {
-					user.getSession((err, session) => {
-						if (err) {
-							return reject(err);
-						}
-						resolve(session);
-					});
-				});
+		} else {
 
-				if (session) {
-					const token = session.getIdToken().getJwtToken();
-					return await authenticate(token);
-				}
+			const session = await getUserSession();
+
+			if (session) {
+				const token = session.getIdToken().getJwtToken();
+				return await authenticate(token);
 			}
+
 		}
 		throw new Error('No token in storage.');
 	};
@@ -352,6 +335,53 @@ namespace Cognito {
 	export const getSessionExpiryTime = (): Date => {
 		return AWS.config.credentials && (AWS.config.credentials as any).expireTime || new Date();
 	};
+
+	export async function getJWTToken(): Promise<string | undefined> {
+
+		const session = await getUserSession();
+		if (session && session.getIdToken) {
+			const idToken = session.getIdToken();
+			return idToken.jwtToken;
+		}
+	}
+
+	function getUserSession(): Promise<any> {
+		const currentCognitoUser = userPool.getCurrentUser();
+		return new Promise<any>((resolve, reject) => {
+			if (
+				currentCognitoUser &&
+				currentCognitoUser.getSession
+			) {
+				return currentCognitoUser.getSession((error, session) => {
+
+
+					if (error) {
+						return reject(error);
+					}
+					resolve(session);
+				});
+			}
+			reject('session not available');
+		});
+	}
+
+	export async function getRefreshToken(): Promise<string | undefined> {
+		const session = await getUserSession();
+		if (session && session.getRefreshToken) {
+			const refreshToken = session.getRefreshToken();
+			return refreshToken.token;
+		}
+	}
+
+	export function getUsername(): string | undefined {
+		const currentCognitoUser = userPool.getCurrentUser();
+		if (
+			currentCognitoUser &&
+			currentCognitoUser.getUsername
+		) {
+			return currentCognitoUser.getUsername();
+		}
+	}
 }
 
 export default Cognito;
