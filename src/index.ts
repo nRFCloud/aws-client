@@ -1,5 +1,5 @@
 import * as AWS from 'aws-sdk';
-import * as AWSCognitoSyncManager from 'amazon-cognito-js';
+require('amazon-cognito-js');
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import {Logger} from 'Iris-FE/src/logger/Logger';
 import {CognitoUserSession} from "amazon-cognito-identity-js";
