@@ -243,6 +243,22 @@ namespace Cognito {
 			}));
 	};
 
+	export const startDevzoneSession  = async (credential): Promise<void> => {
+		AWS.config.credentials = credential;
+        await new Promise((resolve, reject) => {
+            if (AWS.config.credentials) {
+                (AWS.config.credentials as any).refresh(error => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    resolve();
+                });
+            } else {
+                reject('Credentials undefined');
+            }
+        });
+	};
+
 	export const resumeSession = async (): Promise<void> => {
 		const credentials = retrieveRefreshCredentials();
 		if (credentials) {
@@ -253,7 +269,7 @@ namespace Cognito {
 
 			const cognitoUser = new CognitoUser(userData);
 			const result: any = await new Promise((resolve, reject) => {
-				cognitoUser.refreshSession(credentials.refreshToken, (err, result) => {
+				cognitoUser.refreshSession((credentials as any).refreshToken, (err, result) => {
 					if (err) {
 						return reject(err);
 					}

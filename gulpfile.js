@@ -36,6 +36,6 @@ gulp.task('default', ['buildprod'], () => {
 });
 
 gulp.task('copy', () => {
-	return gulp.src('./dist/aws-wrapper.min.js')
+	return gulp.src('./dist/aws-wrapper.js')
 		.pipe(gulp.dest('../nrfcloud-web-frontend/dist'));
 });
