@@ -243,8 +243,8 @@ namespace Cognito {
 			}));
 	};
 
-	export const startDevzoneSession  = (credential): Promise<void> => {
-		AWS.config.credentials = credential;
+	export const startDevzoneSession = (credentials): Promise<void> => {
+		AWS.config.credentials = credentials;
         return new Promise((resolve, reject) => {
             if (AWS.config.credentials) {
                 (AWS.config.credentials as any).refresh(error => {
