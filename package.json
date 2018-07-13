@@ -8,7 +8,7 @@
     "prepare": "npm run build",
     "buildproduction": "gulp",
     "builddev": "gulp builddev",
-    "copydev": "gulp copy",
+    "copydev": "gulp copydev",
     "build": "npm run builddev && npm run buildproduction"
   },
   "files": [
