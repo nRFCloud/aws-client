@@ -322,31 +322,42 @@ namespace Cognito {
 		});
 	};
 
-	export const userInfo = (): { userName: string, accountId: string, loginExpire: string } => {
-		const cognitoUser = userPool.getCurrentUser();
-		const credentials = AWS && AWS.config && AWS.config.credentials ? AWS.config.credentials : null;
-		if (cognitoUser !== null && credentials) {
-			return {
-				userName: (cognitoUser as any).username,
-				accountId: (credentials as any).data.IdentityId,
-				loginExpire: (credentials as any).expireTime.toISOString(),
-			};
-		}
+    export const userInfo = async (): Promise<any> => {
+        const cognitoUser = userPool.getCurrentUser();
+        const credentials = AWS && AWS.config && AWS.config.credentials ? AWS.config.credentials : null;
+        let userName;
 
-		if (credentials) { // DevZone login
-			return {
-				userName: '',
-				accountId: (credentials as any).data.IdentityId,
-				loginExpire: (credentials as any).expireTime.toISOString(),
-			};
-		}
+        if (credentials) {
+            userName = await new Promise<string>((resolve, reject) => {
+                const client = new CognitoSyncManager();
+                client.openOrCreateDataset('identityInfo', (err, dataset) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    dataset
+                        .synchronize({
+                            onSuccess: (dataset) => {
+                                dataset.get('name', (err, value) => {
+                                    if (!err) {
+                                        resolve(value);
+                                    }
+                                });
+                            },
+                            onFailure: err => {
+                                reject(err);
+                            },
+                        });
+                });
 
-		return {
-			userName: '',
-			accountId: '',
-			loginExpire: '',
-		};
-	};
+            }) ;
+        }
+
+        return {
+            userName: userName || (cognitoUser as any).username,
+            accountId: (credentials as any).data.IdentityId,
+            loginExpire: (credentials as any).expireTime.toISOString(),
+        };
+    };
 
 	export const getSessionExpiryTime = (): Date => {
 		return AWS.config.credentials && (AWS.config.credentials as any).expireTime || new Date();
