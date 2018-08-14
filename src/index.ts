@@ -340,7 +340,7 @@ namespace Cognito {
                     dataset
                         .synchronize({
                             onSuccess: (dataset) => {
-                                dataset.get('name', (err, value) => {
+                                dataset.get('email', (err, value) => {
                                     if (!err) {
                                         resolve(value);
                                     }
