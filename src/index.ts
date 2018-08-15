@@ -322,31 +322,82 @@ namespace Cognito {
 		});
 	};
 
-	export const userInfo = (): { userName: string, accountId: string, loginExpire: string } => {
-		const cognitoUser = userPool.getCurrentUser();
-		const credentials = AWS && AWS.config && AWS.config.credentials ? AWS.config.credentials : null;
-		if (cognitoUser !== null && credentials) {
-			return {
-				userName: (cognitoUser as any).username,
-				accountId: (credentials as any).data.IdentityId,
-				loginExpire: (credentials as any).expireTime.toISOString(),
-			};
+    export const userInfo = async (): Promise<{ userName: string, accountId: string, loginExpire: string, loginType: string }> => {
+        const cognitoUser = userPool.getCurrentUser();
+        const credentials = AWS && AWS.config && AWS.config.credentials ? AWS.config.credentials : null;
+
+        const accountId = getAccountId(credentials);
+        const loginExpire = getLoginExpire(credentials);
+        let userName = getUserName(cognitoUser),
+			loginType = 'cognito';
+
+        if (credentials && !cognitoUser) {  // DevZone login
+            loginType = 'devzone';
+            userName = await new Promise<string>((resolve, reject) => {
+                const client = new CognitoSyncManager();
+                client.openOrCreateDataset('identityInfo', (err, dataset) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    dataset
+                        .synchronize({
+                            onSuccess: (dataset) => {
+                                dataset.get('email', (err, value) => {
+                                    if (!err) {
+                                        resolve(value);
+                                    }
+                                });
+                            },
+                            onFailure: err => {
+                                reject(err);
+                            },
+                        });
+                });
+
+            }) ;
+        }
+
+        return {
+            userName,
+            accountId,
+            loginExpire,
+			loginType,
+        };
+    };
+
+    function getUserName(cognitoUser) {
+		if (
+            cognitoUser &&
+			(cognitoUser as any).username
+		) {
+			return (cognitoUser as any).username;
 		}
 
-		if (credentials) { // DevZone login
-			return {
-				userName: '',
-				accountId: (credentials as any).data.IdentityId,
-				loginExpire: (credentials as any).expireTime.toISOString(),
-			};
+		return '';
+    }
+
+    function getAccountId(credentials) {
+		if (
+			credentials &&
+			(credentials as any).data &&
+			(credentials as any).data.IdentityId
+		) {
+			return (credentials as any).data.IdentityId;
 		}
 
-		return {
-			userName: '',
-			accountId: '',
-			loginExpire: '',
-		};
-	};
+		return '';
+    }
+
+    function getLoginExpire(credentials) {
+    	if (
+            credentials &&
+			(credentials as any).expireTime
+		) {
+    		return (credentials as any).expireTime.toLocaleString();
+		}
+
+		return '';
+	}
 
 	export const getSessionExpiryTime = (): Date => {
 		return AWS.config.credentials && (AWS.config.credentials as any).expireTime || new Date();
