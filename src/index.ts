@@ -322,15 +322,17 @@ namespace Cognito {
 		});
 	};
 
-    export const userInfo = async (): Promise<{ userName: string, accountId: string, loginExpire: string }> => {
+    export const userInfo = async (): Promise<{ userName: string, accountId: string, loginExpire: string, loginType: string }> => {
         const cognitoUser = userPool.getCurrentUser();
         const credentials = AWS && AWS.config && AWS.config.credentials ? AWS.config.credentials : null;
 
         const accountId = getAccountId(credentials);
         const loginExpire = getLoginExpire(credentials);
-        let userName = getUserName(cognitoUser);
+        let userName = getUserName(cognitoUser),
+			loginType = 'cognito';
 
         if (credentials && !cognitoUser) {  // DevZone login
+            loginType = 'devzone';
             userName = await new Promise<string>((resolve, reject) => {
                 const client = new CognitoSyncManager();
                 client.openOrCreateDataset('identityInfo', (err, dataset) => {
@@ -359,6 +361,7 @@ namespace Cognito {
             userName,
             accountId,
             loginExpire,
+			loginType,
         };
     };
 
