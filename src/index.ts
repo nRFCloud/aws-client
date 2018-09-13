@@ -28,9 +28,8 @@ namespace Cognito {
 	async function getCurrentUser(): Promise<AmazonCognitoIdentity.CognitoUser | null> {
 		const currentUser = userPool.getCurrentUser();
 		if (currentUser) {
-			await getUserSession(currentUser);
+			currentUser.signInUserSession = await getUserSession();
 		}
-
 		return currentUser;
 	}
 
@@ -412,15 +411,14 @@ namespace Cognito {
 		}
 	}
 
-	function getUserSession(cognitoUser?): Promise<any> {
-		const currentCognitoUser = cognitoUser || userPool.getCurrentUser();
+	function getUserSession(): Promise<any> {
+		const currentCognitoUser = userPool.getCurrentUser();
 		return new Promise<any>((resolve, reject) => {
 			if (
 				currentCognitoUser &&
 				currentCognitoUser.getSession
 			) {
 				return currentCognitoUser.getSession((error, session) => {
-
 
 					if (error) {
 						return reject(error);
