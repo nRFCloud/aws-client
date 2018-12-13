@@ -33,6 +33,7 @@
     "amazon-cognito-identity-js": "^2.0.3",
     "amazon-cognito-js": "^1.1.0",
     "awesome-typescript-loader": "^5.0.0",
+    "aws-appsync": "^1.7.0",
     "aws-iot-device-sdk": "^2.2.1",
     "aws-sdk": "^2.226.1",
     "babel-core": "^6.26.0",
