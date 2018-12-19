@@ -2,7 +2,8 @@ import * as AWS from 'aws-sdk';
 require('amazon-cognito-js');
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import {Logger} from 'Iris-FE/src/logger/Logger';
-import {CognitoUserSession} from "amazon-cognito-identity-js";
+import { CognitoUser, CognitoUserPool, CognitoUserSession } from "amazon-cognito-identity-js";
+import { getCredentials, getQueryStringValue } from './DevzoneHelper';
 
 const {CognitoSyncManager, CognitoIdentityCredentials} = AWS; // provided by dist/amazon-cognito.min.js from https://github.com/aws/amazon-cognito-js (NOT Amplify!)
 const {AuthenticationDetails, CognitoUser, CognitoRefreshToken, CognitoUserAttribute, CognitoUserPool} = AmazonCognitoIdentity; // provided by dist/amazon-cognito-identity.min.js from https://github.com/aws/aws-amplify/tree/master/packages/amazon-cognito-identity-js
@@ -49,6 +50,7 @@ namespace Cognito {
 
     const clearRefreshCredentials = (): void => {
         localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(STORAGE_KEY_DEVZONE_REFRESH);
     };
 
     const storeRefreshCredentials = (username: string, refreshToken): void => {
@@ -244,8 +246,13 @@ namespace Cognito {
             }));
     };
 
-    export const startDevzoneSession = (credentials): Promise<void> => {
-        AWS.config.credentials = credentials;
+    export const startDevzoneSession = (): Promise<void> => {
+
+        AWS.config.credentials = getCredentials();
+        const devzoneRefreshToken = getQueryStringValue('refreshToken');
+        const STORAGE_KEY = 'devzoneRefreshToken';
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({devzoneRefreshToken}));
+
         return new Promise((resolve, reject) => {
             if (AWS.config.credentials) {
                 (AWS.config.credentials as any).refresh(error => {
@@ -260,10 +267,8 @@ namespace Cognito {
         });
     };
 
-    export const resumeSession = async (): Promise<void> => {
+    export const resumeSession = async (stage = null): Promise<void> => {
         const credentials = retrieveRefreshCredentials();
-        // Devzone or Cognito credential?
-        console.log('Expecting credentials', credentials);
 
         if (
             credentials &&
@@ -277,7 +282,6 @@ namespace Cognito {
 
             const cognitoUser = new CognitoUser(userData);
             const result: any = await new Promise((resolve, reject) => {
-                console.log('Refresh creds from cognito', credentials.refreshToken);
                 cognitoUser.refreshSession((credentials as any).refreshToken, (err, result) => {
                     if (err) {
                         return reject(err);
@@ -289,13 +293,15 @@ namespace Cognito {
             await authenticate(token);
             storeRefreshCredentials(credentials.username, result.getRefreshToken());
             return;
-        } else if (credentials && credentials.devzoneRefreshToken) {
-            console.log('Expecting devzoneRefreshToken', credentials.devzoneRefreshToken);
+        } else if (
+            credentials &&
+            credentials.devzoneRefreshToken
+        ) {
             const dzRefreshToken = credentials.devzoneRefreshToken;
-            const result = await (window as any).axios(`https://local.account.nrfcloud.com/web/refresh/?refreshToken=${dzRefreshToken}`);
+            const dzRefreshEP = dzRefreshEndpoint(stage);
+            const result = await (window as any).axios(dzRefreshEP(dzRefreshToken));
             const newToken = result && result.data && result.data.token;
-            console.log('Expecting new token', JSON.stringify(newToken));
-            await authenticate(JSON.stringify(newToken));
+            await authenticate(newToken, false);
             return;
         } else {
 
@@ -310,6 +316,16 @@ namespace Cognito {
         throw new Error('No token in storage.');
     };
 
+    const dzRefreshEndpoint = (stage: "development" | "beta" | "production") => {
+        const base = {
+            "development": "https://local.account.nrfcloud.com/web/refresh/?refreshToken=",
+            "beta": "https://beta.account.nrfcloud.com/web/refresh/?refreshToken=",
+            "production": "https://account.nrfcloud.com/web/refresh/?refreshToken=",
+        };
+
+        return (refreshToken) => `${base[stage]}${refreshToken}`;
+    };
+
     export const getUserFromUsername = (username) => {
         const userData = {
             Username: username,
@@ -318,13 +334,16 @@ namespace Cognito {
         return new CognitoUser(userData);
     };
 
-    const authenticate = async (token): Promise<void> => {
-        // AWS.config.credentials = new CognitoIdentityCredentials({
-        //     IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
-        //     Logins: {
-        //         [USERPOOL_IDP]: token,
-        //     },
-        // });
+    const authenticate = async (token, resetCredentials = true): Promise<void> => {
+        if (resetCredentials) {
+            AWS.config.credentials = new CognitoIdentityCredentials({
+                IdentityPoolId: COGNITO_IDENTITY_POOL_ID,
+                Logins: {
+                    [USERPOOL_IDP]: token,
+                },
+            });
+        }
+
         await new Promise((resolve, reject) => {
             if (AWS.config.credentials) {
                 (AWS.config.credentials as any).refresh(error => {
