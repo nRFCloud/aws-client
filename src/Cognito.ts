@@ -3,7 +3,7 @@ require('amazon-cognito-js');
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 import {Logger} from 'Iris-FE/src/logger/Logger';
 import { CognitoUser, CognitoUserPool, CognitoUserSession } from "amazon-cognito-identity-js";
-import { getCredentials, getQueryStringValue } from './DevzoneHelper';
+import { dzRefreshEndpoint, getCredentials, getQueryStringValue } from './DevzoneHelper';
 
 const {CognitoSyncManager, CognitoIdentityCredentials} = AWS; // provided by dist/amazon-cognito.min.js from https://github.com/aws/amazon-cognito-js (NOT Amplify!)
 const {AuthenticationDetails, CognitoUser, CognitoRefreshToken, CognitoUserAttribute, CognitoUserPool} = AmazonCognitoIdentity; // provided by dist/amazon-cognito-identity.min.js from https://github.com/aws/aws-amplify/tree/master/packages/amazon-cognito-identity-js
@@ -314,16 +314,6 @@ namespace Cognito {
 
         }
         throw new Error('No token in storage.');
-    };
-
-    const dzRefreshEndpoint = (stage: "development" | "beta" | "production") => {
-        const base = {
-            "development": "https://local.account.nrfcloud.com/web/refresh/?refreshToken=",
-            "beta": "https://beta.account.nrfcloud.com/web/refresh/?refreshToken=",
-            "production": "https://account.nrfcloud.com/web/refresh/?refreshToken=",
-        };
-
-        return (refreshToken) => `${base[stage]}${refreshToken}`;
     };
 
     export const getUserFromUsername = (username) => {

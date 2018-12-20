@@ -27,3 +27,13 @@ export function getCredentials(): AWS.CognitoIdentityCredentials {
 
     return cognitoCredentials;
 }
+
+export const dzRefreshEndpoint = (stage: "development" | "beta" | "production") => {
+    const base = {
+        "development": "https://local.account.nrfcloud.com/web/refresh/?refreshToken=",
+        "beta": "https://beta.account.nrfcloud.com/web/refresh/?refreshToken=",
+        "production": "https://account.nrfcloud.com/web/refresh/?refreshToken=",
+    };
+
+    return (refreshToken) => `${base[stage]}${refreshToken}`;
+};
