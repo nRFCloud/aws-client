@@ -29,7 +29,6 @@
   "devDependencies": {
     "@types/jest": "^22.2.3",
     "@types/node": "^9.6.6",
-    "Iris-FE": "git+ssh://git@github.com/NordicPlayground/nrfcloud-web-frontend.git",
     "amazon-cognito-identity-js": "^2.0.3",
     "amazon-cognito-js": "^1.1.0",
     "awesome-typescript-loader": "^5.0.0",

@@ -1,7 +1,7 @@
 import * as AWS from 'aws-sdk';
 require('amazon-cognito-js');
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
-import {Logger} from 'Iris-FE/src/logger/Logger';
+
 import { CognitoUser, CognitoUserPool, CognitoUserSession } from "amazon-cognito-identity-js";
 import { dzRefreshEndpoint, getCredentials, getQueryStringValue } from './DevzoneHelper';
 
@@ -238,7 +238,7 @@ namespace Cognito {
                                 });
                         });
                     } catch (err) {
-                        Logger.error('Sync failed', err);
+                        //squelch error
                     }
                     resolve(cognitoUser);
                 },
