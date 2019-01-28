@@ -1,7 +1,6 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify-es').default;
-const rename = require('gulp-rename');
 const webpack = require('webpack');
 const gulpWebpack = require('webpack-stream');
 
@@ -36,7 +35,6 @@ gulp.task('copy', () => {
 
 gulp.task('copydev', () => {
 	return gulp.src('./dist/aws-wrapper.js')
-		.pipe(rename('aws-wrapper.min.js'))
 		.pipe(gulp.dest('../nrfcloud-web-frontend/dist'));
 });
 

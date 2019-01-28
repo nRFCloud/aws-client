@@ -5,7 +5,10 @@ We have to keep our AWS dependencies in a separate repo becuase our build proces
 
 ## Scripts
 ```sh
-# dev - build ./dist/aws-wrapper.js and copy to ../nrfcloud-web-frontend/dist/aws-wrapper.min.js
+# builds and copies both dev and production
+npm run all
+
+# dev - build ./dist/aws-wrapper.js and copy to ../nrfcloud-web-frontend/dist/aws-wrapper.js
 npm run dev
 
 # production - build ./dist/aws-wrapper.min.js and copy to ../nrfcloud-web-frontend/dist/aws-wrapper.min.js
