@@ -1,66 +1,66 @@
 {
-  "name": "aws-wrapper",
-  "version": "1.0.0",
-  "description": "A wrapper over the AWS bits",
-  "main": "dist/aws-wrapper.min.js",
-  "scripts": {
-    "build:dev": "gulp builddev",
-    "build:production": "gulp",
-    "copy:dev": "gulp copydev",
-    "copy:production": "gulp copy",
-    "dev": "npm run build:dev && npm run copy:dev",
-    "production": "npm run build:production && npm run copy:production",
-    "test": "jest"
-  },
-  "files": [
-    "src/index.ts"
-  ],
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "transform": {
-      "\\.ts$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "/tests/.*\\.test\\.ts$"
-  },
-  "author": "Nathan Kerr",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/jest": "^22.2.3",
-    "@types/node": "^9.6.6",
-    "amazon-cognito-identity-js": "^2.0.3",
-    "amazon-cognito-js": "^1.1.0",
-    "awesome-typescript-loader": "^5.0.0",
-    "aws-appsync": "^1.7.0",
-    "aws-iot-device-sdk": "^2.2.1",
-    "aws-sdk": "^2.226.1",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-runtime": "^6.26.0",
-    "gulp": "^3.9.1",
-    "gulp-cli": "^2.0.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-rename": "^1.4.0",
-    "gulp-uglify-es": "^1.0.4",
-    "jest": "^22.4.3",
-    "json-loader": "^0.5.7",
-    "react": "^16.7.0",
-    "react-apollo": "^2.4.0",
-    "react-dom": "^16.7.0",
-    "ts-jest": "^22.4.4",
-    "ts-loader": "^4.2.0",
-    "typescript": "^2.8.3",
-    "url-search-params-polyfill": "^5.0.0",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.14",
-    "webpack-merge": "^4.1.2",
-    "webpack-stream": "^4.0.3"
-  }
+	"name": "aws-wrapper",
+	"version": "1.0.0",
+	"description": "A wrapper over the AWS bits",
+	"main": "dist/aws-wrapper.min.js",
+	"scripts": {
+		"all": "npm run dev && npm run production",
+		"build:dev": "gulp builddev",
+		"build:production": "gulp",
+		"copy:dev": "gulp copydev",
+		"copy:production": "gulp copy",
+		"dev": "npm run build:dev && npm run copy:dev",
+		"production": "npm run build:production && npm run copy:production",
+		"test": "jest"
+	},
+	"files": [
+		"src/index.ts"
+	],
+	"jest": {
+		"moduleFileExtensions": [
+			"ts",
+			"js"
+		],
+		"transform": {
+			"\\.ts$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+		},
+		"testRegex": "/tests/.*\\.test\\.ts$"
+	},
+	"author": "Nathan Kerr",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/jest": "^22.2.3",
+		"@types/node": "^9.6.6",
+		"amazon-cognito-identity-js": "^2.0.3",
+		"amazon-cognito-js": "^1.1.0",
+		"awesome-typescript-loader": "^5.0.0",
+		"aws-appsync": "^1.7.0",
+		"aws-iot-device-sdk": "^2.2.1",
+		"aws-sdk": "^2.226.1",
+		"babel-core": "^6.26.0",
+		"babel-loader": "^7.1.4",
+		"babel-plugin-external-helpers": "^6.22.0",
+		"babel-plugin-transform-async-to-generator": "^6.24.1",
+		"babel-plugin-transform-runtime": "^6.23.0",
+		"babel-polyfill": "^6.26.0",
+		"babel-preset-env": "^1.6.1",
+		"babel-runtime": "^6.26.0",
+		"gulp": "^3.9.1",
+		"gulp-cli": "^2.0.1",
+		"gulp-concat": "^2.6.1",
+		"gulp-uglify-es": "^1.0.4",
+		"jest": "^22.4.3",
+		"json-loader": "^0.5.7",
+		"react": "^16.7.0",
+		"react-apollo": "^2.4.0",
+		"react-dom": "^16.7.0",
+		"ts-jest": "^22.4.4",
+		"ts-loader": "^4.2.0",
+		"typescript": "^2.8.3",
+		"url-search-params-polyfill": "^5.0.0",
+		"webpack": "^4.6.0",
+		"webpack-cli": "^2.0.14",
+		"webpack-merge": "^4.1.2",
+		"webpack-stream": "^4.0.3"
+	}
 }
