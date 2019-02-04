@@ -35,14 +35,8 @@ import {
 
 import Cognito from './Cognito';
 import { isDevZoneLogin } from './DevzoneHelper';
-
 import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
-
-// import { ApolloClient } from 'apollo-client';
-
-// import { OperationDefinitionNode } from 'graphql';
-
 import { getMainDefinition } from 'apollo-utilities';
 
 export {
