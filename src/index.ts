@@ -13,5 +13,5 @@ export {
 	Query,
 	Mutation,
 	graphql,
-    gql
+	gql
 };
