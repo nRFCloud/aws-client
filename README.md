@@ -37,8 +37,11 @@ npm run build:dev && npm run build:production
 # build and copy the files to ../nrfcloud-web-frontend
 npm run all
 
-# commit
+# add files and commit
 git commit -am "<my commit message>"
+
+# re-tag (this is dumb but necessary since our build assets are committed)
+git tag -f $(git describe --abbrev=0 --tags)
 
 # push commits
 git push origin HEAD
@@ -50,12 +53,12 @@ git push origin --tags
 ```
 
 ### 3. Make a release
-Go to [the releases page](https://github.com/nRFCloud/aws-client/releases) and follow the steps to make a release
+Go to [the releases page](https://github.com/nRFCloud/aws-client/releases), find the most recent tag, and follow the steps to make a release
 
 ## Versioning
 We use [Semantic Versioning](https://semver.org) rules. 
 
-`npm version` is used to manage tags/package.json. See [here]((#1-create-a-tag)) for details.
+`npm version` is used to manage tags/package.json. See [here](#1-create-a-tag) for details.
 
 The build process automatically inserts the version number from `package.json` into the built files (this is for a version checking process on the [the Iris Frontend project](https://github.com/NordicPlayground/nrfcloud-web-frontend)).
 
