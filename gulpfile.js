@@ -1,8 +1,13 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify-es').default;
+const header = require('gulp-header');
+const banner = require('gulp-banner');
 const webpack = require('webpack');
 const gulpWebpack = require('webpack-stream');
+const { version } = require('./package.json');
+// console.log('VERSION', version);
+// process.exit();
 
 gulp.task('builddev', ['compiledev'], () => {
 	return gulp.src(['./dist/aws-wrapper.js', './src/aws-iot-sdk-browser-bundle.min.js'])
@@ -41,5 +46,6 @@ gulp.task('copydev', () => {
 gulp.task('default', ['buildprod'], () => {
 	return gulp.src('./dist/aws-wrapper.min.js')
 		.pipe(uglify())
+		.pipe(banner('/*! version: <%= version %> */\n', {version}))
 		.pipe(gulp.dest('./dist'));
 });
