@@ -1,6 +1,6 @@
 {
 	"name": "aws-wrapper",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A wrapper over the AWS bits",
 	"main": "dist/aws-wrapper.min.js",
 	"scripts": {
