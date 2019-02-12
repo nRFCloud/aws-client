@@ -1,20 +1,21 @@
 const path = require('path');
 const webpack = require('webpack');
+const { version } = require('./package.json');
 
 const babelPresets = [[
-  require.resolve("babel-preset-env"),
-  {
-    "modules": false,
-    "useBuiltIns": "usage",
-    forceAllTransforms: true
-  }
+	require.resolve("babel-preset-env"),
+	{
+		"modules": false,
+		"useBuiltIns": "usage",
+		forceAllTransforms: true
+	}
 ]
 ];
 
 const babelPlugins = [
-  'babel-plugin-transform-runtime',
-  "babel-plugin-transform-async-to-generator",
-  'babel-plugin-external-helpers'
+	'babel-plugin-transform-runtime',
+	"babel-plugin-transform-async-to-generator",
+	'babel-plugin-external-helpers'
 ].map(require.resolve);
 
 module.exports = {
@@ -27,6 +28,11 @@ module.exports = {
 		library: 'awsWrapper',
 		libraryTarget: 'umd',
 	},
+	plugins: [
+		new webpack.BannerPlugin({
+			banner: `version: ${version}`
+		})
+	],
 	module: {
 		rules: [
 			{

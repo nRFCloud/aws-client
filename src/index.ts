@@ -18,7 +18,9 @@ import {
 	concat,
 	split,
 	from 
-} from 'apollo-link'
+} from 'apollo-link';
+
+import gql from 'graphql-tag';
 
 import { 
 	ApolloConsumer, 
@@ -27,6 +29,7 @@ import {
 	Mutation, 
 	Query, 
 } from 'react-apollo';
+
 
 import { 
 	InMemoryCache, 
@@ -47,6 +50,7 @@ export {
 	isDevZoneLogin, 
 	onError,
 	NormalizedCacheObject,
+	gql,
 	// OperationDefinitionNode,
 	
 	// react-apollo
