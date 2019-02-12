@@ -33,7 +33,7 @@ import {
 
 import { 
 	InMemoryCache, 
-	NormalizedCacheObject 
+	NormalizedCacheObject,
 } from 'apollo-cache-inmemory';
 
 import Cognito from './Cognito';
@@ -45,12 +45,12 @@ import { getMainDefinition } from 'apollo-utilities';
 export {
 	ApolloClient,
 	Cognito, 
-	InMemoryCache,
 	getMainDefinition,
+	gql,
+	InMemoryCache,
 	isDevZoneLogin, 
 	onError,
 	NormalizedCacheObject,
-	gql,
 	// OperationDefinitionNode,
 	
 	// react-apollo
