@@ -1,18 +1,5 @@
-import AWSAppSyncClient from 'aws-appsync';
-import Cognito from './Cognito';
-import { isDevZoneLogin } from './DevzoneHelper';
-import { ApolloProvider, ApolloConsumer, Query, Mutation, Subscription, graphql } from 'react-apollo';
-import gql from 'graphql-tag';
-
-export {
-	AWSAppSyncClient,
-	Cognito,
-	isDevZoneLogin,
-	ApolloConsumer,
-	ApolloProvider,
-	Query,
-  Mutation,
-  Subscription,
-	graphql,
-	gql
-};
+export { default as AWSAppSyncClient } from 'aws-appsync';
+export { default as Cognito } from './Cognito';
+export { isDevZoneLogin } from './DevzoneHelper';
+export { ApolloConsumer, ApolloProvider, Query, Mutation, Subscription, graphql } from 'react-apollo';
+export { default as gql } from 'graphql-tag';
