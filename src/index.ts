@@ -1,7 +1,7 @@
 import AWSAppSyncClient from 'aws-appsync';
 import Cognito from './Cognito';
 import { isDevZoneLogin } from './DevzoneHelper';
-import { ApolloProvider, ApolloConsumer, Query, Mutation, graphql } from 'react-apollo';
+import { ApolloProvider, ApolloConsumer, Query, Mutation, Subscription, graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 export {
@@ -11,7 +11,8 @@ export {
 	ApolloConsumer,
 	ApolloProvider,
 	Query,
-	Mutation,
+  Mutation,
+  Subscription,
 	graphql,
 	gql
 };
