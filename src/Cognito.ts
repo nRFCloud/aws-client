@@ -298,8 +298,7 @@ namespace Cognito {
             credentials.devzoneRefreshToken
         ) {
             const dzRefreshToken = credentials.devzoneRefreshToken;
-            const dzRefreshEP = dzRefreshEndpoint(stage);
-            const result = await (window as any).axios(dzRefreshEP(dzRefreshToken));
+            const result = await (window as any).axios(dzRefreshEndpoint(dzRefreshToken, stage));
             const newToken = result && result.data && result.data.token;
             await authenticate(newToken, false);
             return;
