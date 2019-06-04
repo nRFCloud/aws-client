@@ -29,12 +29,16 @@ export function getCredentials(): AWS.CognitoIdentityCredentials {
 }
 
 const dzRefreshEndpointBases = {
-  development: 'https://local.account.nrfcloud.com/web/refresh/?refreshToken=',
+  dev: 'https://local.account.nrfcloud.com/web/refresh/?refreshToken=',
   beta: 'https://beta.account.nrfcloud.com/web/refresh/?refreshToken=',
+  prod: 'https://account.nrfcloud.com/web/refresh/?refreshToken=',
+
+  // Keep these around for compatibility, until they are not used anymore
+  development: 'https://local.account.nrfcloud.com/web/refresh/?refreshToken=',
   production: 'https://account.nrfcloud.com/web/refresh/?refreshToken=',
 };
 
-export type Stage = 'development' | 'beta' | 'production';
+export type Stage = 'dev' | 'beta' | 'prod' | 'development' | 'production';
 
 export const dzRefreshEndpoint = (refreshToken: string, stage: Stage) =>
   `${dzRefreshEndpointBases[stage]}${refreshToken}`;
