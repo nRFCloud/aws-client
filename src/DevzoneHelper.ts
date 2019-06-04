@@ -34,5 +34,7 @@ const dzRefreshEndpointBases = {
   production: 'https://account.nrfcloud.com/web/refresh/?refreshToken=',
 };
 
-export const dzRefreshEndpoint = (refreshToken: string, stage: 'development' | 'beta' | 'production') =>
+export type Stage = 'development' | 'beta' | 'production';
+
+export const dzRefreshEndpoint = (refreshToken: string, stage: Stage) =>
   `${dzRefreshEndpointBases[stage]}${refreshToken}`;

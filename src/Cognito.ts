@@ -3,7 +3,7 @@ require('amazon-cognito-js');
 import * as AmazonCognitoIdentity from 'amazon-cognito-identity-js';
 
 import { CognitoUser, CognitoUserPool, CognitoUserSession } from "amazon-cognito-identity-js";
-import { dzRefreshEndpoint, getCredentials, getQueryStringValue } from './DevzoneHelper';
+import { dzRefreshEndpoint, getCredentials, getQueryStringValue, Stage } from './DevzoneHelper';
 
 const { CognitoSyncManager, CognitoIdentityCredentials } = AWS; // provided by dist/amazon-cognito.min.js from https://github.com/aws/amazon-cognito-js (NOT Amplify!)
 const { AuthenticationDetails, CognitoUser, CognitoRefreshToken, CognitoUserAttribute, CognitoUserPool } = AmazonCognitoIdentity; // provided by dist/amazon-cognito-identity.min.js from https://github.com/aws/aws-amplify/tree/master/packages/amazon-cognito-identity-js
@@ -267,7 +267,7 @@ namespace Cognito {
         });
     };
 
-    export const resumeSession = async (stage = null): Promise<void> => {
+    export const resumeSession = async (stage: Stage): Promise<void> => {
         const credentials = retrieveRefreshCredentials();
 
         if (
