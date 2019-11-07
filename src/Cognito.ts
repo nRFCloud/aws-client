@@ -8,12 +8,12 @@ import { dzRefreshEndpoint, getCredentials, getQueryStringValue } from './Devzon
 const { CognitoSyncManager, CognitoIdentityCredentials } = AWS; // provided by dist/amazon-cognito.min.js from https://github.com/aws/amazon-cognito-js (NOT Amplify!)
 const { AuthenticationDetails, CognitoUser, CognitoRefreshToken, CognitoUserAttribute, CognitoUserPool } = AmazonCognitoIdentity; // provided by dist/amazon-cognito-identity.min.js from https://github.com/aws/aws-amplify/tree/master/packages/amazon-cognito-identity-js
 
-// TODO: Make COGNITO_USER_POOL_ID configurable externally
-// TODO: Make COGNITO_CLIENT_ID configurable externally
-// TODO: Make COGNITO_IDENTITY_POOL_ID configurable externally
-const COGNITO_USER_POOL_ID = 'us-east-1_fdiBa7JSO';
-const COGNITO_CLIENT_ID = '2p40shpt1ru5gerbip9limhm15';
-const COGNITO_IDENTITY_POOL_ID = 'us-east-1:c00e1327-dfc2-4aa7-a484-8ca366d11a68';
+// These values default to Nordic's main account but can be overridden using the dynamic
+// configuration mechanism in the nrfcloud-web-frontend project:
+// https://github.com/nRFCloud/nrfcloud-web-frontend/blob/dfb143fec695ed05d38c0b2d52a15accda0aeef4/bin/utils.js#L73
+const COGNITO_USER_POOL_ID = process.env.COGNITO_USER_POOL_ID || 'us-east-1_fdiBa7JSO';
+const COGNITO_IDENTITY_POOL_ID = process.env.COGNITO_IDENTITY_POOL_ID || 'us-east-1:c00e1327-dfc2-4aa7-a484-8ca366d11a68';
+const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID || '2p40shpt1ru5gerbip9limhm15';
 const AWS_REGION = 'us-east-1';
 const USERPOOL_IDP = `cognito-idp.${AWS_REGION}.amazonaws.com/${COGNITO_USER_POOL_ID}`;
 
