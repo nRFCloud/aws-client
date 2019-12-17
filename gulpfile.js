@@ -1,6 +1,5 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify-es').default;
 const banner = require('gulp-banner');
 const webpack = require('webpack');
 const gulpWebpack = require('webpack-stream');
@@ -42,7 +41,6 @@ gulp.task('copydev', () => {
 
 gulp.task('default', ['buildprod'], () => {
 	return gulp.src('./dist/aws-wrapper.min.js')
-		.pipe(uglify())
 		.pipe(banner('/*! version: <%= version %> */\n', {version}))
 		.pipe(gulp.dest('./dist'));
 });
